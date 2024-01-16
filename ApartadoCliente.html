@@ -757,14 +757,14 @@
 
 
       async function fetchData() {
-        const propiedadesPromise = $http.get('https://www.webmoyapico.somee.com/api/PROPIEDADES')
+        const propiedadesPromise = $http.get('https://www.WebPicoMoya.somee.com/api/PROPIEDADES')
         .then(function (response) {
           // Obtener información adicional para cada propiedad
           const promises = response.data.map(function (propiedad) {
-            const tipoPromise = $http.get('https://www.webmoyapico.somee.com/api/TIPO_PROPIEDAD/' + propiedad.TIPO_PROPIEDAD_PER).then(e => e.data);
+            const tipoPromise = $http.get('https://www.WebPicoMoya.somee.com/api/TIPO_PROPIEDAD/' + propiedad.TIPO_PROPIEDAD_PER).then(e => e.data);
 
             // Utilizamos $http.get para la información del propietario
-            const usuarioPromise = $http.get('https://www.webmoyapico.somee.com/api/USUARIOS/' + propiedad.ID_USUARIO_PROPIETARIO).then(e => e.data);
+            const usuarioPromise = $http.get('https://www.WebPicoMoya.somee.com/api/USUARIOS/' + propiedad.ID_USUARIO_PROPIETARIO).then(e => e.data);
 
             return $q.all([tipoPromise, usuarioPromise])
               .then(function (results) {
@@ -786,7 +786,7 @@
           return $q.all(promises);
         })
 
-        const imagenesPromise = $http.get('https://www.webmoyapico.somee.com/api/FOTOS')
+        const imagenesPromise = $http.get('https://www.WebPicoMoya.somee.com/api/FOTOS')
         .then(function (response) {
           return response.data.map(e => {
             const binary = atob(e.FOTO)
@@ -804,22 +804,22 @@
           });
         })
 
-        const caracteristicasPromise = $http.get('https://www.webmoyapico.somee.com/api/CARACTERISTICAS')
+        const caracteristicasPromise = $http.get('https://www.WebPicoMoya.somee.com/api/CARACTERISTICAS')
         .then(function (response) {
           return response.data
         })
 
-        const condicionesPromise = $http.get('https://www.webmoyapico.somee.com/api/CONDICIONES')
+        const condicionesPromise = $http.get('https://www.WebPicoMoya.somee.com/api/CONDICIONES')
         .then(function (response) {
           return response.data;
         })
 
-        const serviciosPromise = $http.get('https://www.webmoyapico.somee.com/api/SERVICIOS')
+        const serviciosPromise = $http.get('https://www.WebPicoMoya.somee.com/api/SERVICIOS')
         .then(function (response) {
           return response.data;
         })
 
-        const alquileresPromise = $http.get("https://www.webmoyapico.somee.com/api/ALQUILERES")
+        const alquileresPromise = $http.get("https://www.WebPicoMoya.somee.com/api/ALQUILERES")
         .then(function (response) {
           return response.data;
         })
@@ -891,7 +891,7 @@
                 propiedad.FECHA_ALQUILER_INICIO = alquiler.FECHA_ALQUILER_INICIO
 
                 // Utilizamos $http.get para la información del propietario
-                await $http.get('https://www.webmoyapico.somee.com/api/USUARIOS/' + alquiler.ID_CLIENTE_PER)
+                await $http.get('https://www.WebPicoMoya.somee.com/api/USUARIOS/' + alquiler.ID_CLIENTE_PER)
                 .then(e => {
                   if (e.data) {
                     propiedad.NOMBRE_INQUILINO = e.data.NOMBRE_USUARIO;
@@ -1049,7 +1049,7 @@
           })
           .then(function () {
             console.log("creando el alquiler")
-            $http.post('https://www.webmoyapico.somee.com/api/ALQUILERES', {
+            $http.post('https://www.WebPicoMoya.somee.com/api/ALQUILERES', {
               ID_ALQUILER: 0,
               FECHA_ALQUILER_INICIO: new Date(),
               ID_CLIENTE_PER: localStorage.getItem('usuarioId'),
@@ -1062,7 +1062,7 @@
                 $scope.propiedadSeleccionada.ESTADO = false;
                 console.log("después: ",$scope.propiedadSeleccionada)
                 console.groupEnd()
-                $http.put('https://www.webmoyapico.somee.com/api/PROPIEDADES/' + $scope.propiedadSeleccionada.ID_PROPIEDAD, $scope.propiedadSeleccionada)
+                $http.put('https://www.WebPicoMoya.somee.com/api/PROPIEDADES/' + $scope.propiedadSeleccionada.ID_PROPIEDAD, $scope.propiedadSeleccionada)
                   .then(function(response) {
                     console.log('Propiedad actualizada exitosamente:', response.data);
                   })
