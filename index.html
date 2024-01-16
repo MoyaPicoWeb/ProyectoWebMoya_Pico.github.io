@@ -1,0 +1,436 @@
+<!-- moya.html -->
+<!DOCTYPE html>
+<html lang="es" ng-app="miApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Usuarios</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.6/ui-bootstrap-tpls.min.js"></script>
+
+<style>
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f8f9fa;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .form-signin {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        color: #2E4053;
+        text-align: center;
+    }
+
+    input.form-control {
+        margin-bottom: 15px;
+    }
+
+    .btn-primary {
+        background-color: #3498db;
+        border: none;
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .btn-primary:hover {
+        background-color: #2980b9;
+    }
+
+    .mensaje-error {
+        color: #e74c3c;
+        font-weight: bold;
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .btn-registro {
+        background-color: #2ecc71;
+        border: none;
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .btn-registro:hover {
+        background-color: #27ae60;
+    }
+</style>
+
+</head>
+<body ng-controller="Main">
+
+  
+    <div class="col-md-6 offset-md-0">
+        <h1 class="text-center mb-4">Iniciar Sesión</h1>
+
+        <form ng-submit="iniciarSesion()" class="form-signin">
+            <!-- En el formulario -->
+
+<div ng-show="mensajeError" class="mensaje-error">{{ mensajeError }}</div>
+<label for="aliasInicio" class="sr-only">Email address:</label>
+<input type="text" id="aliasInicio" ng-model="usuarioInicio.ALIAS_USUARIO" class="form-control" placeholder="Alias" required autofocus><br>
+
+<label for="contrasenaInicio" class="sr-only">Password:</label>
+<input type="password" id="contrasenaInicio" ng-model="usuarioInicio.CONTRASENA" class="form-control" placeholder="Contraseña" required><br>
+<button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
+
+            <!-- Botón que abrirá el modal de registro -->
+            <button class="btn btn-lg btn-secondary btn-block" data-toggle="modal" data-target="#registroModal">Registrarse</button>
+        </form>
+    </div>
+  <!-- Modal de registro -->
+  <div class="modal fade" id="registroModal" tabindex="-1" role="dialog" aria-labelledby="registroModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="registroModalLabel">Registrarse</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Contenido del formulario de registro -->
+          <div class="container mt-2">
+            <h1 class="text-center mt-1">Registrarse</h1>
+
+            <form ng-submit="crearUsuario()" class="form-registro">
+              <div class="mb-2">
+                <label for="alias" class="mt-1">Alias:</label>
+                <input type="text" id="alias" ng-model="nuevoUsuario.ALIAS_USUARIO" class="form-control" required ng-change="validarAlias()">
+                <span style="color:red" ng-show="aliasInvalido">Mínimo 2 caracteres y Máximo 25 caracteres</span><br>
+              </div>
+
+              <div class="mb-2">
+                <label for="contrasena" class="mt-1">Contraseña:</label>
+                <input type="password" id="contrasena" ng-model="nuevoUsuario.CONTRASENA" class="form-control" required><br>
+          
+                <div class="mb-2">
+                <label for="cedula">Cédula:</label>
+                <input type="text" id="cedula" ng-model="nuevoUsuario.CEDULA_USUARIO" class="form-control" required ng-change="validarCedula()">
+                <span style="color:red" ng-show="cedulaInvalido">Debe ingresar 10 digitos</span><br>
+              </div>
+
+                <div class="mb-2">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" ng-model="nuevoUsuario.NOMBRE_USUARIO" class="form-control" required ng-change="validarNombre()">
+                <span style="color:red" ng-show="nombreInvalido">Mínimo 2 caracteres y Máximo 25 caracteres</span><br>
+              </div>
+
+                <div class="mb-2">
+                <label for="apellido">Apellido:</label>
+                <input type="text" id="apellido" ng-model="nuevoUsuario.APELLIDO_USUARIO" class="form-control" required ng-change="validarApellido()">
+                <span style="color:red" ng-show="apellidoInvalido">Mínimo 2 caracteres y Máximo 25 caracteres</span><br>
+              </div>
+
+                <div class="mb-2">
+                <label for="direccion">Dirección:</label>
+                <input type="text" id="direccion" ng-model="nuevoUsuario.DIRECCCION_USUARIO" class="form-control" required ng-change="validarDireccion()">
+                <span style="color:red" ng-show="direccionInvalido">Mínimo 2 caracteres y Máximo 25 caracteres</span><br>
+              </div>
+
+                <div class="mb-2">
+                <label for="correo">Correo:</label>
+                <input type="email" id="correo" ng-model="nuevoUsuario.CORREO_USUARIO" class="form-control" required><br>
+              </div>
+
+                <div class="mb-2">
+                <label for="telefono">Teléfono:</label>
+                <input type="text" id="telefono" ng-model="nuevoUsuario.TELEFONO_USUARIO" class="form-control" required ng-change="validarTelefono()">
+                <span style="color:red" ng-show="telefonoInvalido">Debe ingresar 10 digitos</span><br>
+              </div>
+                <!-- Elimina el campo FECHA_REGISTRO_USUARIO de la interfaz del usuario, ya que se generará automáticamente en la base de datos -->
+          
+                <label for="rol">Rol:</label>
+                <select id="rol" ng-model="nuevoUsuario.ID_ROL_PER" class="form-control" required ng-change="validarRol()">
+                  <option value="" disabled selected>Seleccione un rol</option>
+                  <option value="1">Propietario</option>
+                  <option value="2">Cliente</option>
+                </select>
+                  <span style="color:red" ng-show="rolNoSeleccionado  ">Seleccione un rol.</span><br>
+          
+                <button type="submit" class="btn btn-primary btn-block" ng-disabled="nombreInvalido || apellidoInvalido || direccionInvalido || cedulaInvalido || telefonoInvalido || aliasInvalido || rolNoSeleccionado">Crear Usuario</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script>
+    angular.module('miApp', [])
+        .controller('Main', function ($scope, $timeout) {
+$scope.usuarioInicio = {};
+$scope.nuevoUsuario = {};
+$scope.mensajeError = '';
+
+  // Iniciar sesión
+  $scope.iniciarSesion = function () {
+    console.log('Iniciando sesión con usuario:', $scope.usuarioInicio);
+
+    // Realizar la solicitud GET a la API para verificar las credenciales
+    fetch('https://www.webmoyapico.somee.com/api/USUARIOs', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(usuarios => {
+        const usuarioEncontrado = usuarios.find(usuario =>
+            usuario.ALIAS_USUARIO === $scope.usuarioInicio.ALIAS_USUARIO &&
+            usuario.CONTRASENA === $scope.usuarioInicio.CONTRASENA
+        );
+
+        if (usuarioEncontrado) {
+            // Almacenar el ID_USUARIO en localStorage
+            localStorage.setItem('usuarioId', usuarioEncontrado.ID_USUARIO);
+            localStorage.setItem('correoUsuario', usuarioEncontrado.CORREO_USUARIO);
+            if (usuarioEncontrado.ID_ROL_PER === 1) {
+                // Redirigir a otra página para propietarios
+                window.location.href = '/NavegacionPro.html';
+
+                // Realizar la segunda validación: comparar alias con ID_USUARIO_PROPIETARIO
+                const propietarioEncontrado = usuarios.find(usuario =>
+                    usuario.ALIAS_USUARIO === $scope.usuarioInicio.ALIAS_USUARIO
+                );
+
+                if (propietarioEncontrado) {
+                    // Realizar acciones específicas para el propietario encontrado
+                    console.log('Propietario encontrado:', propietarioEncontrado);
+                    // Puedes realizar más acciones aquí según tus necesidades.
+                }
+            } else if (usuarioEncontrado.ID_ROL_PER === 2) {
+                // Redirigir a otra página para clientes
+                window.location.href = '/ApartadoCliente.html';
+            }
+
+            // Almacenar el ID_USUARIO en localStorage solo si el rol es 1 (propietario)
+            if (usuarioEncontrado.ID_ROL_PER === 1) {
+                localStorage.setItem('idUsuarioPropietario', usuarioEncontrado.ID_USUARIO);
+            }
+
+            // Limpiar campos usando $apply para forzar la actualización del ámbito
+            $scope.$apply(function () {
+                $scope.usuarioInicio.ALIAS_USUARIO = '';
+                $scope.usuarioInicio.CONTRASENA = '';
+            });
+        } else {
+            // Mostrar mensaje de error en lugar de alerta predeterminada
+            $scope.mensajeError = 'Usuario no registrado';
+
+            // Limpiar campos solo si no se encuentra el usuario
+            $scope.$apply(function () {
+                $scope.usuarioInicio.ALIAS_USUARIO = '';
+                $scope.usuarioInicio.CONTRASENA = '';
+            });
+        }
+    })
+    .catch(error => console.error('Error al obtener los usuarios:', error));
+};
+
+
+
+
+    // Función para crear un nuevo usuario
+// Función para crear un nuevo usuario
+$scope.crearUsuario = function () {
+// Verificar si el alias, cédula o correo ya existen antes de realizar la creación
+fetch('https://www.webmoyapico.somee.com/api/USUARIOs', {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+  .then(response => response.json())
+  .then(usuarios => {
+const aliasExistente = usuarios.some(usuario => usuario.ALIAS_USUARIO === $scope.nuevoUsuario.ALIAS_USUARIO);
+const cedulaExistente = usuarios.some(usuario => usuario.CEDULA_USUARIO === $scope.nuevoUsuario.CEDULA_USUARIO);
+const correoExistente = usuarios.some(usuario => usuario.CORREO_USUARIO === $scope.nuevoUsuario.CORREO_USUARIO);
+if (aliasExistente) {
+  alert('No se puede utilizar ese alias');
+} else if (cedulaExistente) {
+  alert('No se puede utilizar esa cédula');
+} else if (correoExistente) {
+  alert('No se puede utilizar ese correo');
+} else {
+  // Si no se encontraron duplicados, procede con la creación del usuario
+  $scope.nuevoUsuario.FECHA_REGISTRO_USUARIO = new Date().toISOString();
+fetch('https://www.webmoyapico.somee.com/api/USUARIOs', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify($scope.nuevoUsuario),
+})
+  .then(response => response.json())
+  .then(data => {
+    alert('Usuario creado con éxito');
+    window.location.reload();
+  })
+  .catch(error => {
+    console.error('Error al crear el usuario:', error);
+    alert('Error al crear el usuario');
+  });
+}
+  })
+  .catch(error => console.error('Error al obtener los usuarios:', error));
+      };
+
+
+
+       /* VALIDACION */
+
+  $scope.nombreInvalido = false;
+
+$scope.validarNombre = function() {
+  var nombre = $scope.nuevoUsuario.NOMBRE_USUARIO;
+
+  // Expresión regular para verificar que el nombre tenga entre 2 y 25 caracteres y puede incluir espacios
+  var regex = /^[a-zA-Z\s]{2,25}$/;
+
+  if (!regex.test(nombre)) {
+      $scope.nombreInvalido = true;
+  } else {
+      $scope.nombreInvalido = false;
+  }
+};
+
+
+
+
+
+
+
+$scope.apellidoInvalido = false;
+
+$scope.validarApellido = function() {
+  var apellido = $scope.nuevoUsuario.APELLIDO_USUARIO;
+
+  // Expresión regular para verificar que el nombre tenga entre 2 y 25 caracteres y puede incluir espacios
+  var regex = /^[a-zA-Z\s]{2,25}$/;
+
+  if (!regex.test(apellido)) {
+      $scope.apellidoInvalido = true;
+  } else {
+      $scope.apellidoInvalido = false;
+  }
+};
+
+
+
+
+
+
+
+$scope.direccionInvalido = false;
+
+$scope.validarDireccion = function() {
+  var direccion = $scope.nuevoUsuario.DIRECCCION_USUARIO;
+
+  // Expresión regular para verificar que el nombre tenga entre 2 y 25 caracteres y puede incluir espacios
+  var regex = /^[a-zA-Z\s]{2,25}$/;
+
+  if (!regex.test(direccion)) {
+      $scope.direccionInvalido = true;
+  } else {
+      $scope.direccionInvalido = false;
+  }
+};
+
+
+
+
+
+$scope.cedulaInvalido = false;
+
+$scope.validarCedula = function() {
+  var cedula = $scope.nuevoUsuario.CEDULA_USUARIO;
+
+  // Expresión regular para verificar que la cédula tenga exactamente 10 dígitos
+  var regex = /^\d{10}$/;
+
+  if (!regex.test(cedula)) {
+      $scope.cedulaInvalido = true;
+  } else {
+      $scope.cedulaInvalido = false;
+  }
+};
+
+
+
+
+
+$scope.telefonoInvalido = false;
+
+$scope.validarTelefono = function() {
+  var telefono = $scope.nuevoUsuario.TELEFONO_USUARIO;
+
+  // Expresión regular para verificar que la cédula tenga exactamente 10 dígitos
+  var regex = /^\d{10}$/;
+
+  if (!regex.test(telefono)) {
+      $scope.telefonoInvalido = true;
+  } else {
+      $scope.telefonoInvalido = false;
+  }
+};
+
+
+
+
+
+$scope.aliasInvalido = false;
+
+$scope.validarAlias = function() {
+  var direccion = $scope.nuevoUsuario.ALIAS_USUARIO;
+
+  // Expresión regular para verificar que el nombre tenga entre 2 y 25 caracteres y puede incluir letras, números y espacios
+  var regex = /^[a-zA-Z0-9\s]{2,25}$/;
+
+  if (!regex.test(direccion)) {
+      $scope.aliasInvalido = true;
+  } else {
+      $scope.aliasInvalido = false;
+  }
+};
+
+
+
+
+$scope.rolNoSeleccionado = true;
+
+$scope.validarRol = function() {
+    $scope.rolNoSeleccionado = !$scope.nuevoUsuario.ID_ROL_PER;
+};
+
+
+
+
+
+  });
+  </script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

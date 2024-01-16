@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="miApp">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Visualizar Propiedades</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+
+
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      background-color: #f7fafc;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      flex-direction: column !important;
+      /* Ajusta el ancho máximo según tus preferencias */
+      width: 100%;
+      margin: 0;
+      padding: 20px;
+      background-color: #f0f4f8;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.25rem;
+      color: #333;
+    }
+
+    input,
+    select {
+      width: calc(100% - 1rem);
+      /* Ajuste del ancho */
+      padding: 0.375rem 0.75rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      border: 1px solid #ced4da;
+      border-radius: 0.25rem;
+      background-color: #fff;
+      margin-bottom: 0.75rem;
+      display: inline-block;
+      /* Alineación en línea */
+    }
+
+    .btn-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 1rem;
+    }
+
+    .btn {
+      flex: 1;
+      height: 50px;
+      box-sizing: border-box;
+    }
+
+    .container-fluid {
+      padding: 20px;
+    }
+
+    .row {
+      margin-right: -15px;
+      margin-left: -15px;
+    }
+
+    .col-md-6 {
+      position: relative;
+      width: 100%;
+      min-height: 1px;
+      padding-right: 15px;
+      padding-left: 15px;
+    }
+
+    body {
+      font-family: "Arial", sans-serif;
+      background-color: #f7fafc;
+      margin: 0;
+      padding: 0;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.25rem;
+      color: #333;
+    }
+
+    input,
+    select {
+      width: calc(100% - 1rem);
+      padding: 0.375rem 0.75rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      border: 1px solid #ced4da;
+      border-radius: 0.25rem;
+      background-color: #fff;
+      margin-bottom: 0.75rem;
+      display: inline-block;
+    }
+
+    .btn-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 1rem;
+    }
+
+    .btn {
+      flex: 1;
+      height: 50px;
+      box-sizing: border-box;
+    }
+
+    .container-fluid {
+      padding: 20px;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      margin-right: -15px;
+      margin-left: -15px;
+    }
+
+    .col-md-6 {
+      flex: 0 0 50%;
+      max-width: 50%;
+      padding-right: 15px;
+      padding-left: 15px;
+    }
+
+    #map {
+      margin-top: 4px;
+    }
+
+    .container.my-8 {
+      display: flex;
+      justify-content: space-between;
+      height: max-content;
+    }
+
+    .tabla{
+      overflow-x: auto;
+      width: 100%;
+    }
+
+    #grid{
+      display: grid;
+      grid-template-columns:35% 65%;
+      width: 100%;
+    }
+
+    .formulario {
+      display:grid;
+      grid-template-columns: 100%;
+    }
+
+    @media (max-width:1024px){
+      #grid{
+        display: grid;
+        grid-template-columns:100%;
+        grid-auto-flow: column;
+        grid-template-rows: auto auto;
+      }
+
+      .formulario {
+        display:grid;
+        grid-template-columns: 50% 50%;
+      }
+
+      .formulario > div:last-child {
+        grid-column-start: 1;
+        grid-column-end: 3;
+      }
+
+      #map {
+        margin-top: 4px;
+        height: 30rem;
+      }
+
+      .container {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+    }
+
+    @media (max-width:512px){
+      .btn-group {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        margin-top: 1rem;
+      }
+    }
+
+
+  </style>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4MobOHCuRW9mD9V4nWj11FuS1sYmXrAg&callback=iniciarMap"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+
+</head>
+
+<body ng-controller="Propiedades" class="bg-gray-100">
+  
+  <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-center">
+    
+    <a href="/NavegacionPro.html" style="text-decoration: none; color: #18191A; font-size: 18px;">
+      <i class="fas fa-sign-out-alt"> </i> <a class="navbar-brand" href="#"> Visualizar Propiedades</a>  
+  </a>
+  
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <button class="btn nav-link text-dark" data-toggle="modal" data-target="#condicionesModal" style="text-decoration: none; font-size: 18px">
+            <i class="fas fa-home"></i> Agregar Condiciones
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="btn nav-link text-dark" data-toggle="modal" data-target="#serviciosModal" style="text-decoration: none; font-size: 18px">
+            <i class="fas fa-cogs"></i> Agregar Servicios
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="btn nav-link text-dark" data-toggle="modal" data-target="#caracteristicasModal" style="text-decoration: none; font-size: 18px">
+            <i class="fas fa-list"></i> Agregar Características
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="btn nav-link text-dark" data-toggle="modal" data-target="#fotosModal" style="text-decoration: none; font-size: 18px">
+            <i class="fas fa-camera"></i> Agregar Fotos
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <div id="grid">
+
+
+  <div class="container my-8 p-4 bg-white shadow-md rounded-md">
+    <h1 class="text-2xl font-bold mb-4">Propiedades</h1>
+
+    <form ng-submit="crearPropiedad()" class="formulario">
+      <div class="mb-2">
+        <label for="id">ID:</label>
+        <input type="text" id="id" ng-model="nuevaPropiedad.ID_PROPIEDAD" readonly />
+        <br>
+      </div>
+
+
+
+
+
+
+      <!-- <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" ng-model="nuevoUsuario.NOMBRE_USUARIO" class="form-control" required ng-change="validarNombre()">
+      <span style="color:red" ng-show="nombreInvalido">El nombre debe tener entre 2 y 25 letras y no puede contener números.</span><br> -->
+
+
+
+
+
+      <div class="mb-2">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" ng-model="nuevaPropiedad.NOMBRE_PROPIEDAD" required ng-change="validarNombrePro()"/><br>
+        <span style="color:red" ng-show="nombreProInvalido">Mínimo 2 caracteres y Máximo 25 caracteres</span><br>
+      </div>
+
+      <div class="mb-2">
+        <label for="tipo">Tipo:</label>
+        <select id="tipo" ng-model="nuevaPropiedad.TIPO_PROPIEDAD_PER" class="form-control" required ng-change="validarTipo()">
+          <option value="" disabled selected>Seleccione una Propiedad</option>
+          <option value="1">Casa</option>
+          <option value="2">Departamento</option>
+          <option value="3">Media Agua</option>
+          <option value="4">Villa</option>
+        </select>
+        <span style="color:red" ng-show="tipoNoSeleccionado  ">Seleccione un tipo de Propiedad.</span><br>
+      </div>
+
+      <div class="mb-2">
+        <label for="ubicacion">Ubicación:</label>
+        <input type="text" id="ubicacion" ng-model="nuevaPropiedad.UBICACION_PROPIEDAD" required ng-change="validarUbiPro()"/><br>
+        <span style="color:red" ng-show="ubiProInvalido">Mínimo 2 caracteres y Máximo 25 caracteres</span><br>
+      </div>
+
+      <div class="mb-2">
+        <label for="precio">Precio:</label>
+        <input type="number" id="precio" ng-model="nuevaPropiedad.PRECIO" required ng-change="validarPrecioPro()"/><br>
+        <span style="color:red" ng-show="precioProInvalido">Puede ingresar máximo 5 dígitos</span><br>
+      </div>
+
+      <div class="mb-2">
+        <label for="estado">Estado:</label>
+        <select id="estado" ng-model="nuevaPropiedad.ESTADO" class="form-control" required ng-change="validarEstado()">
+          <option value="" disabled selected>Seleccione un Estado.</option>
+          <option value="true">Disponible</option>
+          <option value="false">No disponible</option>
+        </select>
+        <span style="color:red" ng-show="estadoNoSeleccionado  ">Seleccione un rol.</span><br>
+      </div>
+
+      <div class="mb-2">
+        <label for="ubicacionX">Ubicación X:</label>
+        <input type="text" id="ubicacionX" ng-model="nuevaPropiedad.UBICACION_X" required readonly />
+      </div>
+
+      <div class="mb-2">
+        <label for="ubicacionY">Ubicación Y:</label>
+        <input type="text" id="ubicacionY" ng-model="nuevaPropiedad.UBICACION_Y" required readonly />
+      </div>
+
+      <div class="mb-2">
+        <label for="id_usuario_propietario">Id Usuario:</label>
+        <input type="text" id="id_usuario_propietario" ng-model="nuevaPropiedad.ID_USUARIO_PROPIETARIO" required
+          readonly />
+      </div>
+
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary"  ng-disabled="myForm.$invalid || nombreProInvalido || precioProInvalido || tipoNoSeleccionado || estadoNoSeleccionado">Crear Propiedad</button>
+        <button type="button" ng-click="eliminarPropiedad()" class="btn btn-danger">Eliminar Propiedad</button>
+        <button type="button" ng-click="actualizarPropiedad()" class="btn btn-warning">Actualizar Propiedad</button>
+        <button type="button" ng-click="limpiarCampos()" class="btn btn-secondary">Limpiar</button>
+      </div>
+    </form>
+
+  </div>
+  <div id="map"></div>
+</div>
+
+  <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+  <div class="modal fade" id="condicionesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <!-- Contenido del modal -->
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Condiciones</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Contenido del formulario y tabla de condiciones -->
+          <div class="col-md-12 offset-md-0">
+            <h1 class="text-center mb-4">Visualizar Condiciones</h1>
+
+            <form ng-submit="crearCondicion()" class="form-signin">
+              <div ng-show="mensajeError" class="mensaje-error">{{ mensajeError }}</div>
+
+              <label for="idCondicion">ID Condición:</label>
+              <input type="text" id="idCondicion" ng-model="condicion.ID_CONDICIONES" class="form-control" readonly />
+
+              <label for="idPropiedad">ID Propiedad:</label>
+              <input type="text" id="idPropiedad" ng-model="nuevaPropiedad.ID_PROPIEDAD" class="form-control" required readonly />
+
+              <div class="form-check">
+                <input type="checkbox" id="mascotas" ng-model="condicion.MASCOTAS" class="form-check-input" />
+                <label for="mascotas" class="form-check-label">Mascotas</label>
+              </div>
+
+              <div class="form-check">
+                <input type="checkbox" id="fiestas" ng-model="condicion.FIESTAS" class="form-check-input" />
+                <label for="fiestas" class="form-check-label">Fiestas</label>
+              </div>
+
+              <div class="form-check">
+                <input type="checkbox" id="fumar" ng-model="condicion.FUMAR" class="form-check-input" />
+                <label for="fumar" class="form-check-label">Fumar</label>
+              </div>
+
+              <div class="form-check">
+                <input type="checkbox" id="modificaciones" ng-model="condicion.MODIFICACIONES" class="form-check-input" />
+                <label for="modificaciones" class="form-check-label">Modificaciones</label>
+              </div>
+
+              <button type="button" ng-click="crearCondicion()" class="btn btn-primary btn-block mt-3" ng-disabled="condicionExiste">Crear Condición</button>
+              <button type="button" ng-click="actualizarCondicion()" class="btn btn-warning btn-block mt-2" ng-disabled="!condicionExiste">Actualizar Condicion</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+  <div class="modal fade" id="serviciosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <!-- Contenido del modal -->
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"> Agregar Servicios </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Contenido del formulario y tabla de condiciones -->
+          <div class="col-md-12 offset-md-0">
+            <h1 class="text-center mb-4">Visualizar Servicios</h1>
+
+            <form ng-submit="crearServicio()" class="form-signin">
+              <div ng-show="mensajeError" class="mensaje-error">
+                {{ mensajeError }}
+              </div>
+
+              <label for="idServicio">ID Servicio:</label>
+              <input type="text" id="idServicio" ng-model="servicio.ID_SERVICIO" class="form-control" readonly>
+
+              <label for="idPropiedad">ID Propiedad:</label>
+              <input type="text" id="idPropiedad" ng-model="nuevaPropiedad.ID_PROPIEDAD" class="form-control" required readonly/>
+
+              <div class="form-check">
+                <input type="checkbox" id="luz" ng-model="servicio.LUZ" class="form-check-input" />
+                <label for="luz" class="form-check-label">Luz Disponible</label>
+              </div>
+
+              <div class="form-check">
+                <input type="checkbox" id="agua" ng-model="servicio.AGUA" class="form-check-input" />
+                <label for="agua" class="form-check-label">Agua Disponible</label>
+              </div>
+
+              <div class="form-check">
+                <input type="checkbox" id="calefon" ng-model="servicio.CALEFON" class="form-check-input" />
+                <label for="calefon" class="form-check-label">Calefón Disponible</label>
+              </div>
+
+              <div class="form-check">
+                <input type="checkbox" id="wifi" ng-model="servicio.WIFI" class="form-check-input" />
+                <label for="wifi" class="form-check-label">WiFi Disponible</label>
+              </div>
+
+              <div class="form-check">
+                <input type="checkbox" id="garaje" ng-model="servicio.GARAJE" class="form-check-input" />
+                <label for="garaje" class="form-check-label">Garaje Disponible</label>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block mt-3" ng-disabled="servicioExiste">Crear Servicio</button>
+              <button type="button" ng-click="actualizarServicio()" class="btn btn-warning btn-block mt-2" ng-disabled="!servicioExiste">Actualizar Servicio</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+  <div class="modal fade" id="caracteristicasModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <!-- Contenido del modal -->
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Características</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Contenido del formulario y tabla de condiciones -->
+          <div class="col-md-12 offset-md-0">
+            <h1 class="text-center mb-4">Visualizar Características</h1>
+
+            <form ng-submit="crearCaracteristica()" class="form-signin">
+              <div ng-show="mensajeError" class="mensaje-error">{{ mensajeError }}</div>
+
+              <div class="mb-2">
+              <label for="idCaracteristica">ID Característica:</label>
+              <input type="text" id="idCaracteristica" ng-model="caracteristica.ID_CARACTERISTICAS" class="form-control" readonly/>
+            </div>
+
+            <div class="mb-2">
+              <label for="idPropiedad">ID Propiedad:</label>
+              <input type="text" id="idPropiedad" ng-model="nuevaPropiedad.ID_PROPIEDAD" class="form-control" required readonly/>
+            </div>
+
+              <div class="mb-2">
+              <label for="habitaciones">Habitaciones:</label>
+              <input type="number" id="habitaciones" ng-model="caracteristica.HABITACIONES" class="form-control" required ng-change="validarHabitacion()"/>
+              <span style="color:red" ng-show="habitacionInvalido">Mínimo 1 digito y Máximo 2</span><br>
+            </div>
+
+            <div class="mb-2">
+              <label for="cocina">Cocina:</label>
+              <input type="number" id="cocina" ng-model="caracteristica.COCINA" class="form-control" required ng-change="validarCocina()"/>
+              <span style="color:red" ng-show="cocinaInvalido">Mínimo 1 digito y Máximo 2</span><br>
+            </div>
+
+              <div class="mb-2">
+              <label for="bano">Baño:</label>
+              <input type="number" id="bano" ng-model="caracteristica.BANO" class="form-control" required ng-change="validarBano()"/>
+              <span style="color:red" ng-show="banoInvalido">Mínimo 1 digito y Máximo 2</span><br>
+            </div>
+
+            <div class="mb-2">
+              <label for="metraje">Metraje:</label>
+              <input type="number" id="metraje" ng-model="caracteristica.METRAJE" step="0.01" class="form-control" required ng-change="validarMetraje()"/>
+              <span style="color:red" ng-show="metrajeInvalido">Hasta 4 digitos y 2 decimales</span><br>
+            </div>
+
+              <div class="mb-2">
+              <div class="form-check">
+                <input type="checkbox" id="amoblado" ng-model="caracteristica.AMOBLADO" class="form-check-input" />
+                <label for="amoblado" class="form-check-label">Amoblado</label>
+              </div>
+            </div>
+
+
+              <div class="mb-2">
+              <div class="form-check">
+                <input type="checkbox" id="jardin" ng-model="caracteristica.JARDIN" class="form-check-input" />
+                <label for="jardin" class="form-check-label">Jardin</label>
+              </div>
+            </div>
+
+              <button type="submit" class="btn btn-primary btn-block mt-3" ng-disabled="caracteristicaExiste || habitacionInvalido || cocinaInvalido || banoInvalido || metrajeInvalido">Crear Característica</button>
+              <button type="button" ng-click="actualizarCaracteristica()" class="btn btn-warning btn-block mt-2" ng-disabled="!caracteristicaExiste || habitacionInvalido || cocinaInvalido || banoInvalido || metrajeInvalido">Actualizar Característica</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+  <div class="modal fade" id="fotosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <!-- Contenido del modal -->
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Fotos</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <!-- Eliminación de campos existentes -->
+
+        <div class="modal-body">
+          <!-- Contenido del formulario y tabla de condiciones -->
+          <div class="col-md-12 offset-md-0">
+            <h1 class="text-center mb-4">Visualizar Fotos</h1>
+
+            <form ng-submit="crearFoto($event)" class="form-signin">
+              <div ng-show="mensajeError" class="mensaje-error"> {{ mensajeError }}</div>
+
+              <label for="idPropiedad">ID Propiedad:</label>
+              <input type="text" id="idPropiedad" ng-model="nuevaPropiedad.ID_PROPIEDAD" class="form-control" required readonly/>
+
+              <!-- Sección para cargar fotos -->
+              <label for="foto1">Foto 1:</label>
+              <input type="file" id="foto1" name="foto1" accept="image/*" class="form-control" ng-model="images[1]" required/>
+              <img ng-src="{{ imagenes[0].src }}">
+
+              <label for="foto2">Foto 2:</label>
+              <input type="file" id="foto2" name="foto2" accept="image/*" class="form-control" ng-model="images[1]" required/>
+              <img ng-src="{{ imagenes[1].src }}">
+
+              <label for="foto3">Foto 3:</label>
+              <input type="file" id="foto3" name="foto3" accept="image/*" class="form-control" ng-model="images[2]" required/>
+              <img ng-src="{{ imagenes[2].src }}">
+
+              <label for="foto4">Foto 4:</label>
+              <input type="file" id="foto4" name="foto4" accept="image/*" class="form-control" ng-model="images[3]" required/>
+              <img ng-src="{{ imagenes[3].src }}">
+
+              <label for="foto5">Foto 5:</label>
+              <input type="file" id="foto5" name="foto5" accept="image/*" class="form-control" ng-model="images[4]" required/>
+              <img ng-src="{{ imagenes[4].src }}">
+
+              <label for="foto6">Foto 6:</label>
+              <input type="file" id="foto6" name="foto6" accept="image/*" class="form-control" ng-model="images[5]" required/>
+              <img ng-src="{{ imagenes[5].src }}">
+
+              <button type="submit" class="btn btn-primary btn-block mt-3" ng-disabled="imagenes.length != 0">Crear Foto</button>
+              <!-- <button type="button" ng-click="eliminarFoto()" class="btn btn-danger btn-block mt-2">Eliminar Foto</button> -->
+              <button type="button" ng-click="actualizarFoto()" class="btn btn-warning btn-block mt-2" ng-disabled="imagenes.length == 0">Actualizar Foto</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+  <div class="tabla">
+
+  <table class="table table-bordered mt-4">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Ubicación</th>
+        <th>Precio</th>
+        <th>Estado</th>
+        <th>Ubicación X</th>
+        <th>Ubicación Y</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="propiedad in propiedades track by $index" ng-click="seleccionarPropiedad(propiedad)">
+        <td>{{ propiedad.ID_PROPIEDAD }}</td>
+        <td>{{ propiedad.NOMBRE_PROPIEDAD }}</td>
+        <td>{{ propiedad.TIPO_PROPIEDAD_PER }}</td>
+        <td>{{ propiedad.UBICACION_PROPIEDAD }}</td>
+        <td>{{ propiedad.PRECIO }}</td>
+        <td>{{ propiedad.ESTADO ? 'Disponible' : 'No disponible' }}</td>
+        <td>{{ propiedad.UBICACION_X }}</td>
+        <td>{{ propiedad.UBICACION_Y }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+<script src="Codigo.js"></script>
+
+</html>

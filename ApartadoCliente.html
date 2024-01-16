@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="miApp">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propiedades para Alquilar</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+    <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f8f8f8;
+      color: #333;
+      border: 10px solid #e0e0e0;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 1.875rem;
+      color: #6a6a6a;
+    }
+
+    #filtroTipo {
+      width: 150px;
+      padding: 10px;
+      margin-right: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    /* Estilos para los controles de filtro */
+    label {
+      display: block;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input[type="number"] {
+      width: 150px;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 0.625rem 1.25rem;
+      cursor: pointer;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    /* Estilos para el contenedor global de filtros */
+    .filter-container {
+      margin-bottom: 20px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e0e0e0;
+    }
+
+    /* Estilos para los contenedores de tipos de propiedad */
+    h2 {
+      font-size: 24px;
+      color: #283747;
+      margin-top: 20px;
+    }
+
+    /* Estilos para los contenedores de propiedades */
+    .propiedad-seccion {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    /* Estilos para los elementos de propiedad */
+    .propiedad-seccion-item {
+      width: 300px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      padding: 20px;
+      margin: 10px;
+      background-color: #fff;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s ease-in-out;
+      box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 25px;
+    }
+
+    .propiedad-seccion-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .propiedad-seccion-item img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+    .propiedad-seccion-item h3 {
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .propiedad-seccion-item p {
+      color: #666;
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    /* Estilos para el botón de agregar al carrito */
+    .propiedad-seccion-item button {
+      background-color: #3498db;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .propiedad-seccion-item button:hover {
+      background-color: #2980b9;
+    }
+
+    /* Estilos para la descripción */
+    .propiedad-descripcion {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .propiedad-descripcion-contenido {
+      background-color: #fff;
+      padding: 20px;
+      width: 95vw;
+      height: 95vh;
+      position: relative;
+      border-radius: 10px;
+      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    .propiedad-descripcion-contenido > div {
+      width: 100%;
+      height: 100%;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cerrar-descripcion {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+      background-color: #333;
+      color: #fff;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      z-index: 999;
+    }
+
+    .cerrar-descripcion:hover {
+      background-color: #555;
+    }
+
+    .carrusel {
+      position: relative;
+      width: 100%;
+    }
+
+    .carrusel-image {
+      width: 100%;
+      height: 10rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .carrusel-image > div > div > img {
+      width: 100%;
+      min-width: 100%;
+      max-width: 100%;
+      max-height: 10rem;
+      min-height: 10rem;
+      height: 10rem;
+      object-fit: cover;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .carrusel-control {
+      background: white;
+      border-radius: 15px;
+      position: absolute;
+      border-color: black;
+      border-width: 1px;
+      display: inline;
+      opacity: 0;
+      top: 50%;
+      padding: 3px 6px 3px 6px;
+      backdrop-filter: blur(2px);
+      font-family: 'Roboto', sans-serif;
+      font-weight: bolder;
+      user-select: none;
+      transition: opacity 350ms;
+    }
+
+    .propiedad-seccion-item:hover .carrusel-control {
+      opacity: 1;
+    }
+
+    .ccback {
+      left: 0;
+    }
+
+    .ccnext {
+      right: 0;
+    }
+
+    .carrusel-bottombar {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      gap: 0.125rem;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .indicator {
+      background: white;
+      border: black solid 1px;
+      border-radius: 0.5rem;
+      width: 0.5rem;
+      height: 0.5rem;
+    }
+
+    .current {
+      background: var(--gray-dark);
+    }
+
+    .galeria {
+      display: grid;
+      height: 60%;
+      grid-template:
+        "a b b" 34%
+        "a c d" 33%
+        "a e f" 33%;
+      grid-gap: 0.10rem 0.20rem;
+    }
+
+    .galeria-img {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .galeria-img,
+    .galeria-img > img {
+      position: relative;
+      max-width: 100%;
+      max-height: 100%;
+      width: 100%;
+      height: 100%;
+      border-radius: 0.25rem;
+      object-fit: cover;
+    }
+
+    .galeria-img:nth-child(1) {
+      grid-area: a;
+    }
+
+    .galeria-img:nth-child(2) {
+      grid-area: b;
+    }
+
+    .galeria-img:nth-child(3) {
+      grid-area: c;
+    }
+
+    .galeria-img:nth-child(4) {
+      grid-area: d;
+    }
+
+    .galeria-img:nth-child(5) {
+      grid-area: e;
+    }
+
+    .galeria-img:nth-child(6) {
+      grid-area: f;
+    }
+
+    /* ------------------------------------------------- */
+    /* Estilos para el contenedor global de filtros */
+    .filter-container {
+      margin-bottom: 20px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e0e0e0;
+    }
+
+    /* Estilos para los contenedores de tipos de propiedad */
+    h2 {
+      font-size: 24px;
+      color: #283747;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    /* Estilos para los elementos de propiedad */
+    .propiedad-seccion-item {
+      width: 300px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      padding: 20px;
+      margin: 10px;
+      background-color: #fff;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s ease-in-out;
+      box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 25px;
+    }
+
+    .propiedad-seccion-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Agregamos un marco y sombra al contenedor de la descripción */
+    .propiedad-descripcion-contenido {
+      background-color: #fff;
+      padding: 20px;
+      width: 95vw;
+      height: 95vh;
+      position: relative;
+      border-radius: 10px;
+      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+      border: 1px solid #e0e0e0;
+    }
+
+    /* Estilos para el contenedor principal */
+    .propiedades-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      align-items: start;
+      text-align: center;
+      margin: 20px;
+    }
+
+    /* Estilos para cada sección de propiedades */
+    .propiedades-section {
+      flex: 1;
+      /* max-width: 25rem; */
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+      /* Para que las esquinas redondeadas funcionen correctamente */
+      box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Añadido un borde inferior a los títulos de las secciones */
+    .propiedades-section h1 {
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+
+    .filtroFormSection {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: max-content;
+      align-items: start;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+
+
+    .filtroFormSection > div {
+      padding: 0.25rem;
+    }
+
+    .filtroFormSection > .buttonSection {
+      width: 100%;
+      align-items: start;
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+    }
+
+    .filtroFormSection > .filterSection {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .filtroFormSection > .buttonSection > button {
+      flex-grow: 1;
+      width: 100%;
+    }
+
+    .filtroFormSection > .filterSection:nth-child(1) {
+      display: flex;
+    }
+
+    .filtroFormSection > .filterSection:nth-child(1),
+    .filtroFormSection > .filterSection:nth-child(1) > div,
+    .filtroFormSection > .filterSection:nth-child(1) > div > input {
+      width: 100%;
+    }
+
+    .filtroFormSection:nth-child(2) > .buttonSection {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    main {
+      display: flex;
+    }
+
+    main > h1 {
+      display: none;
+    }
+
+    main > section:nth-child(2) {
+      height: 100dvh;
+      width: 40%;
+      position: sticky;
+      top: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-right: #ccc solid 1px;
+      padding-right: 1rem;
+    }
+
+    main > section:nth-child(3) {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+
+    @media (max-width:550px) {
+      .propiedades-container {
+        margin: 0;
+        flex-direction: column;
+      }
+
+      main {
+        flex-direction: column;
+      }
+
+      main > h1 {
+        display: initial;
+      }
+
+      main > section:nth-child(3) > h1 {
+        display: none;
+      }
+
+      main > section:nth-child(2) {
+        height: initial;
+        position: static;
+        width: 100%;
+        padding-right: 0;
+        border-right: none;
+      }
+
+      main > section:nth-child(3) {
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      .filtroFormSection > .buttonSection {
+        gap: 0.5rem;
+      }
+
+      .propiedades-section {
+        width: 100%;
+      }
+    }
+
+    .buttonAlquilar {
+      padding: 5px 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .buttonAlquilar:hover {
+      background-color: #45a049;
+    }
+
+    @media print {
+      .buttonAlquilar {
+        display: none;
+      }
+
+      .cerrar-descripcion {
+        display: none;
+      }
+
+      main {
+        display: none
+      }
+    }
+
+    </style>
+  </head>
+  <body ng-controller="PropiedadesCliente">
+    <main>
+      <h1>Propiedades Disponibles para Alquiler</h1>
+      <section>
+        <div class="filtroFormSection">
+          <div class="filterSection">
+
+            
+            <div>
+              <div>
+                <a href="/index.html" style="text-decoration: none; color: #007BFF; font-size: 18px;">
+                    <i class="fas fa-home"></i> Regresar a la página principal
+                </a>
+            </div>
+
+            <br>
+            <br>
+              
+              <label for="filtroPrecio">Filtrar por Precio:</label>
+              <input type="number" id="filtroPrecio" ng-model="precioFiltro" ng-change="sincronizarFiltros()" placeholder="Ingrese el precio">
+            </div>
+          </div>
+          <div class="buttonSection">
+            <button ng-click="aplicarFiltroMenor()">Menores</button>
+            <button ng-click="aplicarFiltroMayor()">Mayores</button>
+          </div>
+        </div>
+
+        <div class="filtroFormSection">
+          <div class="filterSection">
+            <div>
+              <label for="filtroGlobal">Filtrar:</label>
+              <input type="number" id="filtroGlobal" ng-model="precioFiltroGlobal" ng-readonly="true" placeholder="Ingrese el precio">
+            </div>
+            <div>
+              <label for="filtroTipo">Tipo:</label>
+              <select id="filtroTipo" ng-model="tipoFiltro">
+                <option value="">Todos</option>
+                <option value="1">Casa</option>
+                <option value="2">Departamento</option>
+                <option value="3">Media Agua</option>
+                <option value="4">Villa</option>
+              </select>
+            </div>
+          </div>
+          <div class="buttonSection">
+            <button ng-click="aplicarFiltroGlobal()">Filtrar</button>
+            <button ng-click="limpiarFiltros()">Limpiar Filtros</button>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h1>Propiedades Disponibles para Alquiler</h1>
+        <div ng-repeat="(tipo, nombreTipo) in tiposPropiedad">
+          <h2>{{ tiposPropiedad[tipo].nombre }}</h2>
+          <!-- Este es el título que se mostrará arriba de los contenedores -->
+          <div class="propiedad-seccion">
+            <div ng-repeat="propiedad in propiedades | filter: filtroGlobal | filter: {TIPO_PROPIEDAD_PER: tipo}">
+              <div class="propiedad-seccion-item">
+                <h3>{{ propiedad.NOMBRE_PROPIEDAD }}</h3>
+                <div class="carrusel">
+                  <div ng-if="(imagenes | filter:{ propiedad: propiedad.ID_PROPIEDAD }).length > 1">
+                    <div class="carrusel-control ccback" ng-click="scrollBack($event,propiedad.ID_PROPIEDAD)">
+                      &lt;
+                    </div>
+                  </div>
+                  <div class="carrusel-image cur-0 id-{{ propiedad.ID_PROPIEDAD }}">
+                    <div ng-repeat="imagen in imgs=(imagenes | filter:{ propiedad: propiedad.ID_PROPIEDAD })">
+                      <div ng-if="$first">
+                        <img class=""  ng-src="{{ imagen.src }}" alt="{{ propiedad.NOMBRE_PROPIEDAD }}">
+                      </div>
+                      <div ng-if="!$first">
+                        <img class="hidden" ng-src="{{ imagen.src }}" alt="{{ propiedad.NOMBRE_PROPIEDAD }}">
+                      </div>
+                    </div>
+                    <div ng-show="!imgs.length">
+                      <img ng-src="{{ tiposPropiedad[propiedad.TIPO_PROPIEDAD_PER].imgPorDefecto }}" alt="{{ propiedad.NOMBRE_PROPIEDAD }}">
+                    </div>
+                  </div>
+                  <div ng-if="(imagenes | filter:{ propiedad: propiedad.ID_PROPIEDAD }).length > 1">
+                    <div class="carrusel-control ccnext" ng-click="scrollFoward($event,propiedad.ID_PROPIEDAD)">
+                      &gt;
+                    </div>
+                  </div>
+                  <div class="carrusel-bottombar id-{{ propiedad.ID_PROPIEDAD }}">
+                    <div ng-repeat="imagen in imagenes | filter:{ propiedad: propiedad.ID_PROPIEDAD }">
+                      <div ng-if="$first">
+                        <div class="indicator current"></div>
+                      </div>
+                      <div ng-if="!$first">
+                        <div class="indicator"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div ng-click="mostrarDescripcion($event, propiedad)">
+
+                  <p><strong>Ubicación:</strong> {{ propiedad.UBICACION_PROPIEDAD }}</p>
+                  <p><strong>Precio:</strong> {{ propiedad.PRECIO }}</p>
+                  <p ng-style="{'color': propiedad.ESTADO ? 'green' : 'red'}"><strong>Estado:</strong> {{ propiedad.ESTADO ? 'Disponible' : 'No Disponible' }}</p>
+                  <button>Ver más</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <div id="propiedad-descripcion" class="propiedad-descripcion" ng-show="descripcionVisible">
+
+      <div class="propiedad-descripcion-contenido" id="propiedad-descripcion-contenido">
+        <h2>{{ propiedadSeleccionada.NOMBRE_PROPIEDAD }}</h2>
+        <button class="cerrar-descripcion" ng-click="cerrarDescripcion()">X Cerrar</button> <!-- Botón de cierre -->
+        <div>
+          <div class="galeria">
+            <div ng-repeat="imagen in imgs=(imagenes | filter:{ propiedad: propiedadSeleccionada.ID_PROPIEDAD })" class="galeria-img">
+              <img class="first-img" ng-src="{{ imagen.src }}" alt="{{ propiedadSeleccionada.NOMBRE_PROPIEDAD }}">
+            </div>
+            <div ng-show="!imgs.length" class="galeria-img">
+              <img ng-src="{{ tiposPropiedad[propiedadSeleccionada.TIPO_PROPIEDAD_PER].imgPorDefecto }}" alt="{{ propiedadSeleccionada.NOMBRE_PROPIEDAD }}">
+            </div>
+            <div ng-show="!imgs.length" class="galeria-img">
+              <img ng-src="{{ tiposPropiedad[propiedadSeleccionada.TIPO_PROPIEDAD_PER].imgPorDefecto }}" alt="{{ propiedadSeleccionada.NOMBRE_PROPIEDAD }}">
+            </div>
+            <div ng-show="!imgs.length" class="galeria-img">
+              <img ng-src="{{ tiposPropiedad[propiedadSeleccionada.TIPO_PROPIEDAD_PER].imgPorDefecto }}" alt="{{ propiedadSeleccionada.NOMBRE_PROPIEDAD }}">
+            </div>
+            <div ng-show="!imgs.length" class="galeria-img">
+              <img ng-src="{{ tiposPropiedad[propiedadSeleccionada.TIPO_PROPIEDAD_PER].imgPorDefecto }}" alt="{{ propiedadSeleccionada.NOMBRE_PROPIEDAD }}">
+            </div>
+            <div ng-show="!imgs.length" class="galeria-img">
+              <img ng-src="{{ tiposPropiedad[propiedadSeleccionada.TIPO_PROPIEDAD_PER].imgPorDefecto }}" alt="{{ propiedadSeleccionada.NOMBRE_PROPIEDAD }}">
+            </div>
+            <div ng-show="!imgs.length" class="galeria-img">
+              <img ng-src="{{ tiposPropiedad[propiedadSeleccionada.TIPO_PROPIEDAD_PER].imgPorDefecto }}" alt="{{ propiedadSeleccionada.NOMBRE_PROPIEDAD }}">
+            </div>
+          </div>
+          <br>
+          <div>
+            <p class="descripcion-info"><strong>Precio:</strong> {{ propiedadSeleccionada.PRECIO }}</p>
+            <p class="descripcion-info"><strong>Estado:</strong> {{ propiedadSeleccionada.ESTADO ? 'Disponible' : 'No Disponible' }}</p>
+            <p class="descripcion-info"><strong>Propietario:</strong> {{ propiedadSeleccionada.NOMBRE_PROPIETARIO + ' ' + propiedadSeleccionada.APELLIDO_PROPIETARIO }}</p>
+            <p class="descripcion-info" ng-hide="propiedadSeleccionada.ESTADO"><strong>Inquilino:</strong> {{ propiedadSeleccionada.NOMBRE_INQUILINO + ' ' + propiedadSeleccionada.APELLIDO_INQUILINO }}</p>
+            <p class="descripcion-info" ng-hide="propiedadSeleccionada.ESTADO"><strong>Fecha de Alquiler:</strong> {{ propiedadSeleccionada.FECHA_ALQUILER_INICIO }}</p>
+            <button class="buttonAlquilar" ng-hide="!propiedadSeleccionada.ESTADO" ng-click="alquilarPropiedad()">Alquilar</button>
+            <button class="buttonAlquilar" ng-hide="propiedadSeleccionada.ESTADO" ng-click="generarPdf()">Generar Pdf</button>
+          </div>
+          <div class="propiedades-container">
+            <div class="propiedades-section">
+              <h1>Características</h1>
+              <p class="descripcion-info"><i class="fas fa-bed"></i> <strong>Habitaciones:</strong> {{ propiedadSeleccionada.HABITACIONES }}</p>
+              <p class="descripcion-info"><i class="fas fa-utensils"></i> <strong>Cocina:</strong> {{ propiedadSeleccionada.COCINA }}</p>
+              <p class="descripcion-info"><i class="fas fa-bath"></i> <strong>Baño:</strong> {{ propiedadSeleccionada.BANO }}</p>
+              <p class="descripcion-info"><i class="fas fa-couch"></i> <strong>Amoblado:</strong> {{ propiedadSeleccionada.AMOBLADO ? 'Sí' : 'No' }}</p>
+              <p class="descripcion-info"><i class="fas fa-tree"></i> <strong>Jardín:</strong> {{ propiedadSeleccionada.JARDIN ? 'Sí' : 'No' }}</p>
+              <p class="descripcion-info"><i class="fas fa-ruler"></i> <strong>Metraje:</strong> {{ propiedadSeleccionada.METRAJE }}</p>
+            </div>
+
+            <div class="propiedades-section">
+              <h1>Condiciones</h1>
+              <p class="descripcion-info"><i class="fas fa-paw"></i> <strong>Mascotas:</strong> {{ propiedadSeleccionada.MASCOTAS ? 'Permitido' : 'No Permitido' }}</p>
+              <p class="descripcion-info"><i class="fas fa-glass-cheers">  </i><strong> Fiestas:</strong> {{ propiedadSeleccionada.FIESTAS ? 'Permitido' : 'No Permitido' }}</p>
+              <p class="descripcion-info"><i class="fas fa-smoking"></i>  <strong> Fumar:</strong> {{ propiedadSeleccionada.FUMAR ? 'Permitido' : 'No Permitido' }}</p>
+              <p class="descripcion-info"><i class="fas fa-check-circle">  </i><strong> Modificaciones:</strong> {{ propiedadSeleccionada.MODIFICACIONES ? 'Permitido' : 'No Permitido' }}</p>
+            </div>
+
+            <div class="propiedades-section">
+              <h1>Servicios</h1>
+              <p class="descripcion-info"><i class="fas fa-lightbulb"></i> <strong>LUZ:</strong> {{ propiedadSeleccionada.LUZ ? 'Disponible' : 'No Disponible' }}</p>
+              <p class="descripcion-info"><i class="fas fa-tint "></i> <strong>AGUA:</strong> {{ propiedadSeleccionada.AGUA ? 'Disponible' : 'No Disponible' }}</p>
+              <p class="descripcion-info"><i class="fas fa-thermometer-full"> </i> <strong>CALEFON:</strong> {{ propiedadSeleccionada.CALEFON ? 'Disponible' : 'No Disponible' }}</p>
+              <p class="descripcion-info"><i class="fas fa-wifi "> </i> <strong>WIFI:</strong> {{ propiedadSeleccionada.WIFI ? 'Disponible' : 'No Disponible' }}</p>
+              <p class="descripcion-info"><i class="fas fa-car "> </i> <strong>GARAJE:</strong> {{ propiedadSeleccionada.GARAJE ? 'Disponible' : 'No Disponible' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+
+    const currentElementrx = /cur-(\d)/
+
+    angular.module('miApp', []).controller('PropiedadesCliente', async function ($scope, $http, $q, $timeout) {
+      $scope.tiposPropiedad = {
+        1: { nombre: 'Casa', imgPorDefecto: '/Home3_37171.png' },
+        2: { nombre: 'Departamento', imgPorDefecto: '/departamento.png' },
+        3: { nombre: 'Media Agua', imgPorDefecto: '/mediaAgua.png' },
+        4: { nombre: 'Villa', imgPorDefecto: '/villa.png' }
+      };
+
+      $scope.propiedades = [];
+      $scope.imagenes = [];
+      $scope.caracteristicas = [];
+      $scope.servicios = [];
+      $scope.condiciones = [];
+
+      $scope.descripcionVisible = false;
+
+
+      async function fetchData() {
+        const propiedadesPromise = $http.get('https://www.webmoyapico.somee.com/api/PROPIEDADES')
+        .then(function (response) {
+          // Obtener información adicional para cada propiedad
+          const promises = response.data.map(function (propiedad) {
+            const tipoPromise = $http.get('https://www.webmoyapico.somee.com/api/TIPO_PROPIEDAD/' + propiedad.TIPO_PROPIEDAD_PER).then(e => e.data);
+
+            // Utilizamos $http.get para la información del propietario
+            const usuarioPromise = $http.get('https://www.webmoyapico.somee.com/api/USUARIOS/' + propiedad.ID_USUARIO_PROPIETARIO).then(e => e.data);
+
+            return $q.all([tipoPromise, usuarioPromise])
+              .then(function (results) {
+                [tipo, usuario] = results
+                propiedad.NOMBRE_TIPO = tipo.NOMBRE_TIPO;
+
+                // Verifica si la información del propietario está presente
+                if (usuario) {
+                  propiedad.NOMBRE_PROPIETARIO = usuario.NOMBRE_USUARIO
+                  propiedad.APELLIDO_PROPIETARIO = usuario.APELLIDO_USUARIO;
+                } else {
+                  propiedad.NOMBRE_PROPIETARIO = 'Propietario Desconocido';
+                  propiedad.APELLIDO_PROPIETARIO = 'Propietario Desconocido';
+                }
+                return propiedad
+              })
+          });
+
+          return $q.all(promises);
+        })
+
+        const imagenesPromise = $http.get('https://www.webmoyapico.somee.com/api/FOTOS')
+        .then(function (response) {
+          return response.data.map(e => {
+            const binary = atob(e.FOTO)
+            const uint8Array = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+              uint8Array[i] = binary.charCodeAt(i);
+            }
+
+            var blob = new Blob([uint8Array], { type: 'image/png' });
+            var imgUrl = URL.createObjectURL(blob);
+            return {
+              src: imgUrl,
+              propiedad: e.ID_PRO_PER
+            };
+          });
+        })
+
+        const caracteristicasPromise = $http.get('https://www.webmoyapico.somee.com/api/CARACTERISTICAS')
+        .then(function (response) {
+          return response.data
+        })
+
+        const condicionesPromise = $http.get('https://www.webmoyapico.somee.com/api/CONDICIONES')
+        .then(function (response) {
+          return response.data;
+        })
+
+        const serviciosPromise = $http.get('https://www.webmoyapico.somee.com/api/SERVICIOS')
+        .then(function (response) {
+          return response.data;
+        })
+
+        const alquileresPromise = $http.get("https://www.webmoyapico.somee.com/api/ALQUILERES")
+        .then(function (response) {
+          return response.data;
+        })
+
+        return await $q.all([propiedadesPromise, imagenesPromise, caracteristicasPromise, condicionesPromise, serviciosPromise, alquileresPromise])
+          .then(data => {
+            [
+              $scope.propiedades,
+              $scope.imagenes,
+              $scope.caracteristicas,
+              $scope.condiciones,
+              $scope.servicios,
+              $scope.alquileres,
+            ] = data
+
+            console.log($scope.propiedades)
+            console.log($scope.imagenes)
+            console.log($scope.caracteristicas)
+            console.log($scope.condiciones)
+            console.log($scope.servicios)
+            console.log($scope.alquileres)
+
+            $scope.propiedades.forEach(async function (propiedad) {
+              // mapear caracteristicas
+              const caracteristica = $scope.caracteristicas.find(function (car) {
+                return car.ID_PROPIEDAD_PER === propiedad.ID_PROPIEDAD;
+              });
+
+              if (caracteristica) {
+                propiedad.HABITACIONES = caracteristica.HABITACIONES;
+                propiedad.COCINA = caracteristica.COCINA;
+                propiedad.BANO = caracteristica.BANO;
+                propiedad.AMOBLADO = caracteristica.AMOBLADO;
+                propiedad.JARDIN = caracteristica.JARDIN;
+                propiedad.METRAJE = caracteristica.METRAJE;
+              }
+
+              // mapear condiciones
+              var condicion = $scope.condiciones.find(function (cond) {
+                return cond.ID_PROPIEDAD_PER === propiedad.ID_PROPIEDAD;
+              });
+
+              if (condicion) {
+                propiedad.MASCOTAS = condicion.MASCOTAS;
+                propiedad.FIESTAS = condicion.FIESTAS;
+                propiedad.FUMAR = condicion.FUMAR;
+                propiedad.MODIFICACIONES = condicion.MODIFICACIONES;
+              }
+
+              // mapear servicios
+              var servicio = $scope.servicios.find(function (serv) {
+                return serv.ID_PROPIEDAD_PER === propiedad.ID_PROPIEDAD;
+              });
+
+              if (servicio) {
+                propiedad.LUZ = servicio.LUZ;
+                propiedad.AGUA = servicio.AGUA;
+                propiedad.CALEFON = servicio.CALEFON;
+                propiedad.WIFI = servicio.WIFI;
+                propiedad.GARAJE = servicio.GARAJE;
+              }
+
+              // mapear alquileres
+              var alquiler = $scope.alquileres.find(function (alq) {
+                return alq.ID_PROPIEDAD_PER === propiedad.ID_PROPIEDAD;
+              });
+
+              if (alquiler) {
+                propiedad.FECHA_ALQUILER_INICIO = alquiler.FECHA_ALQUILER_INICIO
+
+                // Utilizamos $http.get para la información del propietario
+                await $http.get('https://www.webmoyapico.somee.com/api/USUARIOS/' + alquiler.ID_CLIENTE_PER)
+                .then(e => {
+                  if (e.data) {
+                    propiedad.NOMBRE_INQUILINO = e.data.NOMBRE_USUARIO;
+                    propiedad.APELLIDO_INQUILINO = e.data.APELLIDO_USUARIO;
+                  } else {
+                    propiedad.NOMBRE_INQUILINO = 'Inquilino Desconocido';
+                    propiedad.APELLIDO_INQUILINO = 'Inquilino Desconocido';
+                  }
+                });
+              }
+            });
+          })
+          .catch(function (error) {
+            console.error('Error al obtener la información:', error);
+          });
+      }
+
+      await fetchData()
+
+      $scope.aplicarFiltroMenor = function () {
+        $scope.filtroMenor = true;
+        $scope.filtroMayor = false;
+        $scope.aplicarFiltroGlobal();
+      };
+
+      $scope.aplicarFiltroMayor = function () {
+        $scope.filtroMenor = false;
+        $scope.filtroMayor = true;
+        $scope.aplicarFiltroGlobal();
+      };
+
+      $scope.aplicarFiltroGlobal = function () {
+        $scope.filtroGlobal = function (propiedad) {
+          var cumpleFiltroPrecio = !$scope.precioFiltroGlobal || (
+            ($scope.filtroMenor && propiedad.PRECIO <= $scope.precioFiltroGlobal) ||
+              ($scope.filtroMayor && propiedad.PRECIO >= $scope.precioFiltroGlobal)
+          );
+
+          var cumpleFiltroTipo = !$scope.tipoFiltro || propiedad.TIPO_PROPIEDAD_PER == $scope.tipoFiltro;
+
+          return cumpleFiltroPrecio && cumpleFiltroTipo;
+        };
+      };
+
+      $scope.mostrarDescripcion = function (event, propiedad) {
+        $scope.propiedadSeleccionada = propiedad;
+        console.log(propiedad)
+        $scope.descripcionVisible = true;
+      };
+      $scope.cerrarDescripcion = function () {
+        $scope.descripcionVisible = false;
+      };
+
+      $scope.sincronizarFiltros = function () {
+        $scope.precioFiltroGlobal = $scope.precioFiltro;
+      };
+
+      $scope.limpiarFiltros = function () {
+        $scope.precioFiltro = '';
+        $scope.filtroMenor = false;
+        $scope.filtroMayor = false;
+        $scope.precioFiltroGlobal = '';
+        $scope.tipoFiltro = '';
+        $scope.aplicarFiltroGlobal();
+      };
+
+
+      $scope.scrollBack = function (event, id) {
+        const element = $(`.carrusel-image.id-${id}`)
+        const current = Number(currentElementrx.exec(element[0].className)[1])
+        const images = $(`.carrusel-image.id-${id} img`)
+        const indicators = $(`.carrusel-bottombar.id-${id} .indicator`)
+        if (current == 0) {
+          return
+        }
+
+        const newPosition = current - 1
+        element.class = element.toggleClass(`cur-${current}`)
+        element.class = element.toggleClass(`cur-${newPosition}`)
+        images[current].classList.toggle("hidden")
+        images[newPosition].classList.toggle("hidden")
+        indicators[current].classList.toggle("current")
+        indicators[newPosition].classList.toggle("current")
+      }
+
+      $scope.scrollFoward = function (event, id) {
+        const element = $(`.carrusel-image.id-${id}`)
+        const current = Number(currentElementrx.exec(element[0].className)[1])
+        const images = $(`.carrusel-image.id-${id} img`)
+        const indicators = $(`.carrusel-bottombar.id-${id} .indicator`)
+        if (current == images.length - 2) {
+          return
+        }
+        const newPosition = current + 1
+        element.class = element.toggleClass(`cur-${current}`)
+        element.class = element.toggleClass(`cur-${newPosition}`)
+        images[current].classList.toggle("hidden")
+        images[newPosition].classList.toggle("hidden")
+        indicators[current].classList.toggle("current")
+        indicators[newPosition].classList.toggle("current")
+      }
+
+      $scope.generarPdf = function() {
+        window.print()
+      }
+
+
+      $scope.alquilarPropiedad = function () {
+        console.log('Alquilando propiedad...');
+        console.log('Correo Usuario:', localStorage.getItem('correoUsuario'));
+
+
+        // Obtiene el correo electrónico del cliente (usuario logueado)
+        var clienteEmail = localStorage.getItem("correoUsuario");
+
+        // Check if clienteEmail is valid
+        if (!clienteEmail) {
+          console.error('Invalid or empty email address for the recipient.');
+          return;
+        }
+
+        // Fetch the HTML content from the external link
+        axios.get('https://raw.githubusercontent.com/GabrielPico24/Correo/main/Template.html')
+          .then(function (templateResponse) {
+            // Configura los datos del correo electrónico para el cliente
+            var emailData = new FormData();
+            emailData.append('apikey', 'C2AFBC5A3A2312D12F11F98E536D05DE588C6DF978D8099EEC285D191C0770FC936E776C9C6C46F80D952BD793F6C80E');  // Replace with your actual API key
+            emailData.append('subject', '¡Propiedad Alquilada!');
+            emailData.append('from', 'kpico7987@uta.edu.ec');
+            emailData.append('to', clienteEmail);
+            emailData.append('bodyHtml', templateResponse.data);  // Use the fetched HTML content
+            emailData.append('isTransactional', true);
+
+            // Realiza la solicitud HTTP para enviar el correo al cliente
+            axios.post(
+              "https://api.elasticemail.com/v2/email/send/",
+              emailData,
+              {
+                headers: {
+                  'Content-Type': 'multipart/form-data',  // Set the content type to form data
+                }
+              }
+            )
+              .then(function (response) {
+                // Maneja la respuesta de la API si es necesario
+                console.log(response.data);
+              })
+              .catch(function (error) {
+                // Maneja los errores de la solicitud HTTP
+                console.error(error);
+              });
+          })
+          .catch(function (templateError) {
+            console.error('Error fetching template:', templateError);
+          })
+          .then(function () {
+            console.log("creando el alquiler")
+            $http.post('https://www.webmoyapico.somee.com/api/ALQUILERES', {
+              ID_ALQUILER: 0,
+              FECHA_ALQUILER_INICIO: new Date(),
+              ID_CLIENTE_PER: localStorage.getItem('usuarioId'),
+              ID_PROPIETARIO_PER: $scope.propiedadSeleccionada.ID_USUARIO_PROPIETARIO,
+              ID_PROPIEDAD_PER: $scope.propiedadSeleccionada.ID_PROPIEDAD
+            })
+              .then(function (){
+                console.group("actualizando propiedad")
+                console.log("antes: ",$scope.propiedadSeleccionada)
+                $scope.propiedadSeleccionada.ESTADO = false;
+                console.log("después: ",$scope.propiedadSeleccionada)
+                console.groupEnd()
+                $http.put('https://www.webmoyapico.somee.com/api/PROPIEDADES/' + $scope.propiedadSeleccionada.ID_PROPIEDAD, $scope.propiedadSeleccionada)
+                  .then(function(response) {
+                    console.log('Propiedad actualizada exitosamente:', response.data);
+                  })
+                  .catch(function(error) {
+                    console.error('Error al actualizar la propiedad:', error);
+                  });
+                })
+                .then(function () {
+                  // esta invoca la ventana de impresión, no es automática pero funciona bien :)
+                  window.print();
+                  /** esto lo hacía automáticamente, pero es muy complicado de hacerlo bien
+                  document.querySelector("button.buttonAlquilar").classList.toggle("hidden");
+                  document.querySelector("button.cerrar-descripcion").classList.toggle("hidden");
+                  const element = document.querySelector("div#propiedad-descripcion-contenido");
+                  const formattedDate = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
+                  const options = {
+                      margin: 1,
+                      filename: 'Alquiler_' + formattedDate + '.pdf',
+                      image: { type: 'jpeg', quality: 1.0 },
+                      html2canvas: { scale: 3 },
+                      jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+                  };
+
+                  html2pdf(element, options)
+                    .then(function () {
+                      document.querySelector("button.buttonAlquilar").classList.toggle("hidden");
+                      document.querySelector("button.cerrar-descripcion").classList.toggle("hidden");
+                    });
+                  **/
+                })
+                .catch(function (error) {
+                  console.error("Error creando el alquiler:", error)
+                  alert("Error realizando el contrato")
+                });
+          });
+      };
+    });
+    </script>
+  </body>
+
+</html>

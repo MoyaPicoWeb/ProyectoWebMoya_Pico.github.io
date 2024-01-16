@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="miApp">
+  <head>
+    <title>Propietario</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Font Awesome Cdn Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <link rel="stylesheet" href="/app-alquiler/src/ApartadoPropietario/style.css">
+  </head>
+  <body ng-controller="Propiedades">
+    <div class="container">
+      <nav class="nav-desktop">
+        <div class="navbar">
+          <div class="logo">
+            <h1>Propietarios</h1>
+          </div>
+          <ul>
+            <li><a href="#">
+              <i class="fas fa-user"></i>
+              <span class="nav-item">Panel</span>
+            </a>
+            </li>
+            <li><a href="/Graficos.html">
+              <i class="fas fa-chart-bar"></i>
+              <span class="nav-item">Analiticas</span>
+            </a>
+            </li>
+            <li><a href="/Propietario.html">
+              <i class="fas fa-tasks"></i>
+              <span class="nav-item">Crear Propiedad</span>
+            </a>
+            </li>
+            <li><a href="/index.html">
+              <i class="fas fa-sign-out-alt"></i>
+              <span class="nav-item">Logout</span>
+            </a>
+            </li>
+            
+          </ul>
+        </div>
+      </nav>
+
+      <section class="main">
+        <div class="main-top">
+          <button
+            type="button"
+            id="navbar-toggle"
+            aria-controls="navbar-menu"
+            aria-label="Toggle menu"
+            aria-expanded="false"
+          >
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <nav class="nav-mobile">
+            <div class="navbar">
+              <div class="logo">
+                <h1>Propietarios</h1>
+              </div>
+              <ul>
+                <li><a href="#">
+                  <i class="fas fa-user"></i>
+                  <span class="nav-item">Panel</span>
+                </a>
+                </li>
+                <li><a href="/Graficos.html">
+                  <i class="fas fa-chart-bar"></i>
+                  <span class="nav-item">Analiticas</span>
+                </a>
+                </li>
+                <li><a href="/Propietario.html">
+                  <i class="fas fa-tasks"></i>
+                  <span class="nav-item">Crear Propiedad</span>
+                </a>
+                </li>
+                <li><a href="#">
+                  <i class="fab fa-dochub"></i>
+                  <span class="nav-item">Documnents</span>
+                </a>
+                </li>
+                <li><a href="#">
+                  <i class="fas fa-cog"></i>
+                  <span class="nav-item">Setting</span>
+                </a>
+                </li>
+                <li><a href="#">
+                  <i class="fas fa-question-circle"></i>
+                  <span class="nav-item">Help</span>
+                </a>
+                </li>
+                <li><a href="#" class="logout">
+                  <i class="fas fa-sign-out-alt"></i>
+                  <span class="nav-item">Logout</span>
+                </a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <p>Explore Las propiedades</p>
+        </div>
+        <div class="main-body">
+          <h1>Propiedades Recientes</h1>
+
+          <div class="search_bar">
+            <input type="search" ng-model="searchText" placeholder="Busque alguna propiedad...">
+            <div>
+              <select ng-model="selectedCategory" ng-options="obtenerNombreCategoria(categoria) for categoria in categorias">
+                <option value="">Todas</option>
+              </select>
+              <button ng-click="resetFilters()" class="reset-button">Reset</button>
+            </div>
+          </div>
+
+    
+
+          <div class="row">
+            <p>There are more than <span>{{ propiedades.length }}</span> Propiedades</p>
+            <a href="#" ng-click="mostrarTodas = !mostrarTodas">See all</a>
+          </div>
+
+          <div class="job_card" ng-repeat="propiedad in propiedades.slice(0, mostrarTodas ? propiedades.length : 10) | filter: { NOMBRE_PROPIEDAD: searchText, TIPO_PROPIEDAD_PER: selectedCategory }">
+            <div class="job_details">
+              <div class="img">
+                <img ng-src="{{ tiposPropiedad[propiedad.TIPO_PROPIEDAD_PER].imgPorDefecto }}" alt="{{ tiposPropiedad[propiedad.TIPO_PROPIEDAD_PER].nombre }}">
+              </div>
+              <div class="text">
+                <h2>{{ propiedad.NOMBRE_PROPIEDAD }}</h2>
+                <span>{{ propiedad.UBICACION_PROPIEDAD }}</span>
+                <!-- Agregamos una función para obtener el nombre del propietario -->
+                <p ng-init="obtenerNombrePropietario(propiedad.ID_USUARIO_PROPIETARIO)">Propietario: {{ nombrePropietario }}</p>
+              </div>
+            </div>
+            <div class="job_salary">
+              <h4>${{ propiedad.PRECIO }}</h4>
+              <span>{{ propiedad.FECHA_PUBLICACION }}</span>
+              <div ng-if="propiedad.ESTADO == 1" class="availability available">Disponible</div>
+              <div ng-if="propiedad.ESTADO == 0" class="availability not-available">No Disponible</div>
+
+
+              <section class="main" ng-show="mostrarGraficos">
+                <!-- Contenido de la sección de gráficos -->
+                <div class="chart-section">
+                  <h2>Dashboard de Estadísticas</h2>
+                  <p>Bienvenido a nuestro dashboard interactivo donde puedes explorar las estadísticas de registro de propietarios y clientes.</p>
+
+                  <canvas id="propRegistroUsuariosChart" width="400" height="200"></canvas>
+                  <canvas id="clienteRegistroUsuariosChart" width="400" height="200"></canvas>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+    angular.module('miApp', [])
+      .controller('Propiedades', function ($scope, $http) {
+        // añadir evento al botón de la navegación
+        const navbarToggle = document.querySelector('#navbar-toggle');
+        let isNavbarExpanded = navbarToggle.getAttribute('aria-expanded') === 'true';
+
+        const toggleNavbarVisibility = function () {
+          isNavbarExpanded = !isNavbarExpanded;
+          navbarToggle.setAttribute('aria-expanded', isNavbarExpanded);
+        };
+
+        navbarToggle.addEventListener('click', toggleNavbarVisibility);
+
+        $scope.tiposPropiedad = {
+          1: { nombre: 'Casa', imgPorDefecto: 'Home3_37171.png' },
+          2: { nombre: 'Departamento', imgPorDefecto: 'departamento.png' },
+          3: { nombre: 'Media Agua', imgPorDefecto: 'villa.png' },
+          4: { nombre: 'Villa', imgPorDefecto: 'mediaAgua.png' }
+        };
+        // Inicializar categorias
+        $scope.categorias = [];
+        // Obtener datos de la API
+        // Función para obtener el nombre de la categoría
+        $scope.obtenerNombreCategoria = function (numero) {
+          return numero ? $scope.tiposPropiedad[numero].nombre : 'Todas';
+        };
+
+        // Obtener datos de la API
+        $http.get('https://www.webmoyapico.somee.com/api/PROPIEDADES')
+          .then(function(response) {
+            // Asignar los datos de propiedades al arreglo
+            var usuarioId = localStorage.getItem("usuarioId");
+            $scope.propiedades = response.data.filter(e => e.ID_USUARIO_PROPIETARIO == usuarioId);
+
+            // Obtener las categorías únicas de las propiedades
+            $scope.categorias = [...new Set(response.data.map(propiedad => propiedad.TIPO_PROPIEDAD_PER))];
+          })
+          .catch(function(error) {
+            console.error('Error al obtener las propiedades:', error);
+          });
+        // Resto del código del controlador...
+
+        $scope.obtenerNombrePropietario = function (idUsuarioPropietario) {
+          $http.get('https://www.webmoyapico.somee.com/api/USUARIOs/' + idUsuarioPropietario)
+            .then(function(response) {
+              // Asignar el nombre del propietario
+              $scope.nombrePropietario = response.data.NOMBRE_USUARIO + ' ' + response.data.APELLIDO_USUARIO;
+            })
+            .catch(function(error) {
+              console.error('Error al obtener el nombre del propietario:', error);
+            });
+        };
+
+        $scope.resetFilters = function() {
+          $scope.searchText = '';
+          $scope.selectedCategory = '';
+          $scope.selectedFilter = '';
+        };
+        $scope.mostrarPropiedades = true;
+        $scope.mostrarGraficos = false;
+        $scope.mostrarSeccion = function(seccion) {
+          if (seccion === 'propiedades') {
+            $scope.mostrarPropiedades = true;
+            $scope.mostrarGraficos = false;
+          } else if (seccion === 'graficos') {
+            $scope.mostrarPropiedades = false;
+            $scope.mostrarGraficos = true;
+          }
+        };
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="miApp">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<style>
+  body {
+      font-family: 'Arial', sans-serif;
+      margin: 20px;
+      background-color: #f8f8f8;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .chart-section {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    canvas {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-top: 20px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    p {
+      text-align: center;
+      font-size: 16px;
+      color: #555;
+    }
+</style>
+<body ng-controller="EstadisticasUsuarios">
+
+  <div class="container">
+    <div>
+      <a href="/NavegacionPro.html" style="text-decoration: none; color: #007BFF; font-size: 18px;">
+          <i class="fas fa-home"></i> Regresar a la página principal
+      </a>
+  </div>
+    <h1>Dashboard de Estadísticas</h1>
+    <p>Bienvenido a nuestro dashboard interactivo donde puedes explorar las estadísticas de registro de propietarios y clientes.</p>
+
+    <div class="chart-section">
+      <h2>Propietarios Registrados</h2>
+      <p>Visualiza la cantidad de propietarios que se registraron cada mes.</p>
+      <canvas id="propRegistroUsuariosChart" width="400" height="200"></canvas>
+    </div>
+
+    <div class="chart-section">
+      <h2>Clientes Registrados</h2>
+      <p>Observa cómo ha variado el número de clientes nuevos en cada mes.</p>
+      <canvas id="clienteRegistroUsuariosChart" width="400" height="200"></canvas>
+    </div>
+
+  <script>
+    angular.module('miApp', [])
+      .controller('EstadisticasUsuarios', function ($scope, $http) {
+        $scope.propLabels = [];
+        $scope.propData = [];
+        $scope.clienteLabels = [];
+        $scope.clienteData = [];
+
+        // Nombres de los meses
+        var meses = [
+          'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+          'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        ];
+
+        // Obtener datos de la API
+        $http.get('https://www.webmoyapico.somee.com/api/USUARIOs')
+          .then(function(response) {
+            // Procesar datos para el gráfico de propietarios
+            var propietariosPorMes = {};
+            // Procesar datos para el gráfico de clientes
+            var clientesPorMes = {};
+
+            response.data.forEach(function(usuario) {
+              var fechaRegistro = new Date(usuario.FECHA_REGISTRO_USUARIO);
+              var mes = fechaRegistro.getMonth(); // Sin sumar 1 porque los meses en el array comienzan desde 0
+
+              // Identificar si es propietario o cliente
+              if (usuario.ID_ROL_PER === 1) {
+                propietariosPorMes[mes] = (propietariosPorMes[mes] || 0) + 1;
+              } else if (usuario.ID_ROL_PER === 2) {
+                clientesPorMes[mes] = (clientesPorMes[mes] || 0) + 1;
+              }
+            });
+
+            // Ordenar las etiquetas por mes para propietarios
+            $scope.propLabels = Object.keys(propietariosPorMes).sort(function(a, b) {
+              return a - b;
+            });
+            // Obtener los datos de registro de propietarios por mes
+            $scope.propData = $scope.propLabels.map(function(mes) {
+              return propietariosPorMes[mes];
+            });
+
+            // Ordenar las etiquetas por mes para clientes
+            $scope.clienteLabels = Object.keys(clientesPorMes).sort(function(a, b) {
+              return a - b;
+            });
+            // Obtener los datos de registro de clientes por mes
+            $scope.clienteData = $scope.clienteLabels.map(function(mes) {
+              return clientesPorMes[mes];
+            });
+
+            // Crear el gráfico de propietarios
+            var propCtx = document.getElementById('propRegistroUsuariosChart').getContext('2d');
+            var propRegistroUsuariosChart = new Chart(propCtx, {
+              type: 'bar',
+              data: {
+                labels: $scope.propLabels.map(function(mes) {
+                  return meses[mes];
+                }),
+                datasets: [{
+                  label: 'Propietarios Registrados',
+                  data: $scope.propData,
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                scales: {
+                  x: {
+                    type: 'category',
+                    labels: $scope.propLabels.map(function(mes) {
+                      return meses[mes];
+                    }),
+                    beginAtZero: true
+                  },
+                  y: {
+                    beginAtZero: true
+                  }
+                }
+              }
+            });
+
+            // Crear el gráfico de clientes
+            var clienteCtx = document.getElementById('clienteRegistroUsuariosChart').getContext('2d');
+            var clienteRegistroUsuariosChart = new Chart(clienteCtx, {
+              type: 'bar',
+              data: {
+                labels: $scope.clienteLabels.map(function(mes) {
+                  return meses[mes];
+                }),
+                datasets: [{
+                  label: 'Clientes Registrados',
+                  data: $scope.clienteData,
+                  backgroundColor: 'rgba(192, 75, 75, 0.2)',
+                  borderColor: 'rgba(192, 75, 75, 1)',
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                scales: {
+                  x: {
+                    type: 'category',
+                    labels: $scope.clienteLabels.map(function(mes) {
+                      return meses[mes];
+                    }),
+                    beginAtZero: true
+                  },
+                  y: {
+                    beginAtZero: true
+                  }
+                }
+              }
+            });
+          })
+          .catch(function(error) {
+            console.error('Error al obtener los usuarios:', error);
+          });
+      });
+  </script>
+</body>
+</html>
