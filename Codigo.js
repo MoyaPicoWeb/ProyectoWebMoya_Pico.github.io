@@ -11,7 +11,7 @@ angular.module("miApp", []).controller("Propiedades", function ($scope, $http) {
   $scope.condiciones = [];
 
   // Obtener datos de la API
-  $http.get('https://www.webmoyapico.somee.com/api/CONDICIONES')
+  $http.get('https://www.WebPicoMoya.somee.com/api/CONDICIONES')
     .then(function(response) {
       // Asignar los datos de condiciones al arreglo
       $scope.condiciones = response.data;
@@ -25,7 +25,7 @@ angular.module("miApp", []).controller("Propiedades", function ($scope, $http) {
   $scope.crearCondicion = function (id) {
     // Realizar la solicitud POST a la API con los datos de la nueva condición
     $scope.condicion.ID_PROPIEDAD_PER = $scope.nuevaPropiedad.ID_PROPIEDAD
-    $http.post('https://www.webmoyapico.somee.com/api/CONDICIONES', $scope.condicion)
+    $http.post('https://www.WebPicoMoya.somee.com/api/CONDICIONES', $scope.condicion)
       .then(function(response) {
         console.log('Condición creada:', response.data);
         $scope.condiciones.push($scope.condicion)
@@ -45,7 +45,7 @@ angular.module("miApp", []).controller("Propiedades", function ($scope, $http) {
     console.log('Eliminando condición con ID:', idCondicion);
 
     if (confirm("¿Estás seguro de que deseas eliminar esta condición?")) {
-      $http.delete('https://www.webmoyapico.somee.com/api/CONDICIONES/' + idCondicion)
+      $http.delete('https://www.WebPicoMoya.somee.com/api/CONDICIONES/' + idCondicion)
         .then(function(response) {
           console.log('Condición eliminada exitosamente');
 
@@ -70,7 +70,7 @@ angular.module("miApp", []).controller("Propiedades", function ($scope, $http) {
     console.log('Actualizando condición con ID:', idCondicion);
 
     // Realizar la solicitud PUT a la API con los datos actualizados de la condición
-    $http.put('https://www.webmoyapico.somee.com/api/CONDICIONES/' + idCondicion, $scope.condicion)
+    $http.put('https://www.WebPicoMoya.somee.com/api/CONDICIONES/' + idCondicion, $scope.condicion)
       .then(function(response) {
         console.log('Condición actualizada exitosamente');
 
@@ -97,7 +97,7 @@ angular.module("miApp", []).controller("Propiedades", function ($scope, $http) {
 
   // Función para obtener condiciones actualizadas de la API
   $scope.obtenerCondiciones = function () {
-    $http.get('https://www.webmoyapico.somee.com/api/CONDICIONES')
+    $http.get('https://www.WebPicoMoya.somee.com/api/CONDICIONES')
       .then(function(response) {
         // Actualizar el arreglo de condiciones
         $scope.condiciones = response.data;
@@ -121,7 +121,7 @@ angular.module("miApp", []).controller("Propiedades", function ($scope, $http) {
   $scope.servicios = [];
 
   // Obtener datos de la API
-  $http.get('https://www.webmoyapico.somee.com/api/SERVICIOS')
+  $http.get('https://www.WebPicoMoya.somee.com/api/SERVICIOS')
     .then(function(response) {
       // Asignar los datos de servicios al arreglo
       $scope.servicios = response.data;
@@ -142,7 +142,7 @@ angular.module("miApp", []).controller("Propiedades", function ($scope, $http) {
     console.log('Nuevo servicio antes de la solicitud POST:', $scope.servicio);
 
     // Realizar la solicitud POST a la API con los datos del nuevo servicio
-    $http.post('https://www.webmoyapico.somee.com/api/SERVICIOS', $scope.servicio)
+    $http.post('https://www.WebPicoMoya.somee.com/api/SERVICIOS', $scope.servicio)
       .then(function(response) {
         console.log('Servicio creado exitosamente:', response.data);
 
@@ -168,7 +168,7 @@ angular.module("miApp", []).controller("Propiedades", function ($scope, $http) {
     console.log('Eliminando servicio con ID:', idServicio);
 
     if (confirm("¿Estás seguro de que deseas eliminar este servicio?")) {
-      $http.delete('https://www.webmoyapico.somee.com/api/SERVICIOS/' + idServicio)
+      $http.delete('https://www.WebPicoMoya.somee.com/api/SERVICIOS/' + idServicio)
         .then(function(response) {
           console.log('Servicio eliminado exitosamente');
 
@@ -200,7 +200,7 @@ angular.module("miApp", []).controller("Propiedades", function ($scope, $http) {
     console.log('Actualizando servicio con ID:', idServicio);
 
     // Realizar la solicitud PUT a la API con los datos del servicio actualizados
-    $http.put('https://www.webmoyapico.somee.com/api/SERVICIOS/' + idServicio, $scope.servicio)
+    $http.put('https://www.WebPicoMoya.somee.com/api/SERVICIOS/' + idServicio, $scope.servicio)
       .then(function(response) {
         console.log('Servicio actualizado exitosamente:', response.data);
 
@@ -229,7 +229,7 @@ angular.module("miApp", []).controller("Propiedades", function ($scope, $http) {
 
   // Función para obtener servicios actualizados de la API
   $scope.obtenerServicios = function () {
-    $http.get('https://www.webmoyapico.somee.com/api/SERVICIOS')
+    $http.get('https://www.WebPicoMoya.somee.com/api/SERVICIOS')
       .then(function(response) {
         // Actualizar el arreglo de servicios
         $scope.servicios = response.data;
@@ -251,7 +251,7 @@ angular.module("miApp", []).controller("Propiedades", function ($scope, $http) {
   $scope.caracteristicas = [];
 
   // Obtener datos de la API
-  $http.get('https://www.webmoyapico.somee.com/api/CARACTERISTICAS')
+  $http.get('https://www.WebPicoMoya.somee.com/api/CARACTERISTICAS')
     .then(function(response) {
       // Asignar los datos de características al arreglo
       $scope.caracteristicas = response.data;
@@ -266,7 +266,7 @@ angular.module("miApp", []).controller("Propiedades", function ($scope, $http) {
     console.log('Nueva característica antes de la solicitud POST:', $scope.caracteristica);
 
     // Realizar la solicitud POST a la API con los datos de la nueva característica
-    $http.post('https://www.webmoyapico.somee.com/api/CARACTERISTICAS', $scope.caracteristica)
+    $http.post('https://www.WebPicoMoya.somee.com/api/CARACTERISTICAS', $scope.caracteristica)
       .then(function(response) {
         console.log('Característica creada exitosamente:', response.data);
 
@@ -292,7 +292,7 @@ angular.module("miApp", []).controller("Propiedades", function ($scope, $http) {
     console.log('Eliminando característica con ID:', idCaracteristica);
 
     if (confirm("¿Estás seguro de que deseas eliminar esta característica?")) {
-      $http.delete('https://www.webmoyapico.somee.com/api/CARACTERISTICAS/' + idCaracteristica)
+      $http.delete('https://www.WebPicoMoya.somee.com/api/CARACTERISTICAS/' + idCaracteristica)
         .then(function(response) {
           console.log('Característica eliminada exitosamente');
 
@@ -323,7 +323,7 @@ angular.module("miApp", []).controller("Propiedades", function ($scope, $http) {
     console.log('Actualizando característica con ID:', idCaracteristica);
 
     // Realizar la solicitud PUT a la API con los datos de la característica actualizados
-    $http.put('https://www.webmoyapico.somee.com/api/CARACTERISTICAS/' + idCaracteristica, $scope.caracteristica)
+    $http.put('https://www.WebPicoMoya.somee.com/api/CARACTERISTICAS/' + idCaracteristica, $scope.caracteristica)
       .then(function(response) {
         console.log('Característica actualizada exitosamente:', response.data);
 
@@ -365,7 +365,7 @@ angular.module("miApp", []).controller("Propiedades", function ($scope, $http) {
 
   // Función para obtener características actualizadas de la API
   $scope.obtenerCaracteristicas = function () {
-    $http.get('https://www.webmoyapico.somee.com/api/CARACTERISTICAS')
+    $http.get('https://www.WebPicoMoya.somee.com/api/CARACTERISTICAS')
       .then(function(response) {
         // Actualizar el arreglo de características
         $scope.caracteristicas = response.data;
@@ -535,7 +535,7 @@ function cargarUbicaciones() {
   // Obtener el ID_USUARIO_PROPIETARIO almacenado en localStorage
   var usuarioId = localStorage.getItem("usuarioId");
 
-  fetch('https://www.webmoyapico.somee.com/api/PROPIEDADES')
+  fetch('https://www.WebPicoMoya.somee.com/api/PROPIEDADES')
     .then(function (response) {
       return response.json();
     })
@@ -588,7 +588,7 @@ function cargarUbicaciones() {
   $scope.propiedades = [];
   /// Obtener datos de la API
   $http
-    .get("https://www.webmoyapico.somee.com/api/PROPIEDADES")
+    .get("https://www.WebPicoMoya.somee.com/api/PROPIEDADES")
     .then(function (response) {
       // Filtrar las propiedades basándose en el ID_USUARIO
       var usuarioId = localStorage.getItem("usuarioId");
@@ -606,7 +606,7 @@ function cargarUbicaciones() {
     console.log('Nueva propiedad antes de la solicitud POST:', $scope.nuevaPropiedad);
 
     // Realizar la solicitud POST a la API con los datos de la nueva propiedad
-    $http.post('https://www.webmoyapico.somee.com/api/PROPIEDADES', $scope.nuevaPropiedad)
+    $http.post('https://www.WebPicoMoya.somee.com/api/PROPIEDADES', $scope.nuevaPropiedad)
       .then(function(response) {
         console.log('Propiedad creada:', response.data);
 
@@ -633,7 +633,7 @@ function cargarUbicaciones() {
     console.log('Actualizando propiedad con ID:', idPropiedad);
 
     // Realizar la solicitud PUT a la API con los datos de la propiedad actualizados
-    $http.put('https://www.webmoyapico.somee.com/api/PROPIEDADES/' + idPropiedad, $scope.nuevaPropiedad)
+    $http.put('https://www.WebPicoMoya.somee.com/api/PROPIEDADES/' + idPropiedad, $scope.nuevaPropiedad)
       .then(function(response) {
         console.log('Propiedad actualizada exitosamente:', response.data);
 
@@ -659,7 +659,7 @@ function cargarUbicaciones() {
     console.log('Eliminando propiedad con ID:', idPropiedad);
 
     if (confirm("¿Estás seguro de que deseas eliminar esta propiedad?")) {
-      $http.delete('https://www.webmoyapico.somee.com/api/PROPIEDADES/' + idPropiedad)
+      $http.delete('https://www.WebPicoMoya.somee.com/api/PROPIEDADES/' + idPropiedad)
         .then(function(response) {
           console.log('Propiedad eliminada exitosamente');
           // Eliminar la propiedad de la lista en el cliente
@@ -681,7 +681,7 @@ function cargarUbicaciones() {
 
 
   $scope.obtenerPropiedades = function () {
-    $http.get('https://www.webmoyapico.somee.com/api/PROPIEDADES')
+    $http.get('https://www.WebPicoMoya.somee.com/api/PROPIEDADES')
       .then(function(response) {
         // Asignar los datos de propiedades al arreglo
         $scope.propiedades = response.data;
@@ -708,7 +708,7 @@ function cargarUbicaciones() {
     $scope.caracteristica = $scope.caracteristicas.find(c => c.ID_PROPIEDAD_PER == propiedad.ID_PROPIEDAD)
     $scope.caracteristicaExiste = $scope.caracteristicas.find(c => c.ID_PROPIEDAD_PER == propiedad.ID_PROPIEDAD)
 
-    $http.get('https://www.webmoyapico.somee.com/api/FOTOS')
+    $http.get('https://www.WebPicoMoya.somee.com/api/FOTOS')
     .then(function (response) {
       $scope.imagenes = response.data.map(e => {
         const binary = atob(e.FOTO)
@@ -785,7 +785,7 @@ function cargarUbicaciones() {
     console.log(`Fotos a subir:`,$scope.images)
 
     const postPromises = $scope.images.map(async img => {
-      $http.post('https://www.webmoyapico.somee.com/api/FOTOS', img)
+      $http.post('https://www.WebPicoMoya.somee.com/api/FOTOS', img)
         .then(function(response) {
           console.log('Foto creada:', response.data);
         })
@@ -842,7 +842,7 @@ function cargarUbicaciones() {
     console.log(`Fotos a actualizar:`,$scope.images)
 
     const postPromises = $scope.images.map(async img => {
-      $http.put(`https://www.webmoyapico.somee.com/api/FOTOS/${img.ID_FOTO}`, img)
+      $http.put(`https://www.WebPicoMoya.somee.com/api/FOTOS/${img.ID_FOTO}`, img)
         .then(function(response) {
           console.log('Foto Actualizada:', response.data);
         })
