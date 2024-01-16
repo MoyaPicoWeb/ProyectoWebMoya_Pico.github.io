@@ -188,7 +188,7 @@ $scope.mensajeError = '';
     console.log('Iniciando sesión con usuario:', $scope.usuarioInicio);
 
     // Realizar la solicitud GET a la API para verificar las credenciales
-    fetch('https://www.webmoyapico.somee.com/api/USUARIOs', {
+    fetch('https://www.WebPicoMoya.somee.com/api/USUARIOs', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -255,7 +255,7 @@ $scope.mensajeError = '';
 // Función para crear un nuevo usuario
 $scope.crearUsuario = function () {
 // Verificar si el alias, cédula o correo ya existen antes de realizar la creación
-fetch('https://www.webmoyapico.somee.com/api/USUARIOs', {
+fetch('https://www.WebPicoMoya.somee.com/api/USUARIOs', {
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',
@@ -275,7 +275,7 @@ if (aliasExistente) {
 } else {
   // Si no se encontraron duplicados, procede con la creación del usuario
   $scope.nuevoUsuario.FECHA_REGISTRO_USUARIO = new Date().toISOString();
-fetch('https://www.webmoyapico.somee.com/api/USUARIOs', {
+fetch('https://www.WebPicoMoya.somee.com/api/USUARIOs', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
