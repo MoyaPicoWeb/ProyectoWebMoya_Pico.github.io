@@ -185,7 +185,7 @@
         };
 
         // Obtener datos de la API
-        $http.get('https://www.webmoyapico.somee.com/api/PROPIEDADES')
+        $http.get('https://www.WebPicoMoya.somee.com/api/PROPIEDADES')
           .then(function(response) {
             // Asignar los datos de propiedades al arreglo
             var usuarioId = localStorage.getItem("usuarioId");
@@ -200,7 +200,7 @@
         // Resto del código del controlador...
 
         $scope.obtenerNombrePropietario = function (idUsuarioPropietario) {
-          $http.get('https://www.webmoyapico.somee.com/api/USUARIOs/' + idUsuarioPropietario)
+          $http.get('https://www.WebPicoMoya.somee.com/api/USUARIOs/' + idUsuarioPropietario)
             .then(function(response) {
               // Asignar el nombre del propietario
               $scope.nombrePropietario = response.data.NOMBRE_USUARIO + ' ' + response.data.APELLIDO_USUARIO;
