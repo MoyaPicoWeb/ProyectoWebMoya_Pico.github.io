@@ -518,13 +518,13 @@ function actualizarFormulario(propiedad, $scope) {
 function iconos(tipoPropiedad) {
   switch (tipoPropiedad) {
     case 1:
-      return '/Home3_37171.png';
+      return '/ProyectoWebMoya_Pico.github.io/Home3_37171.png';
     case 2:
-      return '/departamento.png';
+      return '/ProyectoWebMoya_Pico.github.io/departamento.png';
     case 3:
-      return '/mediaAgua.png';
+      return '/ProyectoWebMoya_Pico.github.io/mediaAgua.png';
     case 4:
-      return '/villa.png';
+      return '/ProyectoWebMoya_Pico.github.io/villa.png';
     default:
       return '';
   }
